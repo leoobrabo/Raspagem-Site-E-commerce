@@ -8,6 +8,7 @@ from time import sleep
 import openpyxl
 import smtplib
 from email.message import EmailMessage
+import re
 
 
 class Scrappy:
@@ -18,10 +19,21 @@ class Scrappy:
         self.criar_planilha()
         self.enviar_email_cliente()
 
+    # @staticmethod
     def email_usuario(self):
+
         self.email = input(
             'Digite o email para receber o relatorio de valores dos celulares!\n')
         self.email.lower()
+
+        padrao = re.search(
+            r'[a-zA-Z0-9_-]+@[a-zA-Z0-9]+\.[a-zA-Z]{1,3}$', self.email)
+        if padrao:
+            print('email Valido')
+
+        else:
+            print('Digite um email valido!!!')
+            self.email_usuario()
 
     def raspagem_de_dados(self):
         chrome_options = Options()
@@ -32,7 +44,9 @@ class Scrappy:
         self.executable_path = r'G:\Dropbox\OHomemnãoparaNunca\curso_automacao\web_scraping_olx_excel\chromedriver.exe'
         self.driver = webdriver.Chrome(
             executable_path=self.executable_path, options=chrome_options)
+        self.driver.set_window_size(800, 700)
         self.link = 'https://telefonesimportados.netlify.app/'
+        print(self.driver.title)
         self.lista_nome_celulares = []
         self.lista_preco_celulares = []
         self.driver.get(self.link)
@@ -60,6 +74,7 @@ class Scrappy:
 
                 print(f'\u001b[33m{"Não há mais paginas!"}\u001b[0m')
                 print(f'\u001b[32m{"Escaneamento Concluido"}\u001b[0m')
+                self.driver.quit()
 
     def criar_planilha(self):
         index = 2
