@@ -7,6 +7,7 @@ from selenium.common.exceptions import *
 from time import sleep
 import openpyxl
 import smtplib
+import os
 from email.message import EmailMessage
 import re
 
@@ -19,7 +20,6 @@ class Scrappy:
         self.criar_planilha()
         self.enviar_email_cliente()
 
-    # @staticmethod
     def email_usuario(self):
 
         self.email = input(
@@ -41,9 +41,8 @@ class Scrappy:
             'excludeSwitches', ['enable-logging'])
         chrome_options.add_argument('--lang=pr-BR')
         chrome_options.add_argument('--disable-notifications')
-        self.executable_path = r'G:\Dropbox\OHomemnãoparaNunca\curso_automacao\web_scraping_olx_excel\chromedriver.exe'
-        self.driver = webdriver.Chrome(
-            executable_path=self.executable_path, options=chrome_options)
+        self.driver = webdriver.Chrome(executable_path=os.getcwd(
+        ) + os.sep + 'chromedriver.exe', options=chrome_options)
         self.driver.set_window_size(800, 700)
         self.link = 'https://telefonesimportados.netlify.app/'
         print(self.driver.title)
